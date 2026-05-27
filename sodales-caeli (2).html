@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sodales Caeli</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-deep: #0a3d6b;
+    --blue-mid: #1a5a8f;
+    --blue-light: #2e78b5;
+    --blue-pale: #c8def2;
+    --blue-mist: #eef5fc;
+    --white: #ffffff;
+    --cream: #f7f9fc;
+    --gold: #ffffff;
+    --text: #0a1e30;
+    --text-light: #4a6a85;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'EB Garamond', serif;
+    background: var(--white);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── VIEWS ── */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ══════════════════════════════
+     PUBLIC SITE
+  ══════════════════════════════ */
+
+  /* NAV */
+  nav {
+    background: var(--blue-deep);
+    padding: 0 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-family: 'Cinzel', serif;
+    color: var(--white);
+    font-size: 1.2rem;
+    letter-spacing: 0.18em;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .nav-motto {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--blue-pale);
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    opacity: 0.85;
+  }
+  .nav-admin-link {
+    font-family: 'Cinzel', serif;
+    color: var(--blue-pale);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    text-decoration: none;
+    border: none;
+    background: none;
+  }
+  .nav-admin-link:hover { opacity: 1; }
+
+  /* HERO */
+  .hero {
+    background: var(--blue-deep);
+    color: var(--white);
+    text-align: center;
+    padding: 5rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(74,127,181,0.25) 0%, transparent 70%);
+  }
+  .hero-cross {
+    font-size: 2rem;
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+  }
+  .hero h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    margin-bottom: 0.8rem;
+    position: relative;
+  }
+  .hero-divider {
+    width: 50px;
+    height: 1px;
+    background: rgba(255,255,255,0.5);
+    margin: 1.4rem auto;
+  }
+  .hero-motto {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--blue-pale);
+    letter-spacing: 0.06em;
+    position: relative;
+  }
+
+  /* WRITINGS LIST */
+  .writings-section {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+  .section-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    font-style: italic;
+    letter-spacing: 0.05em;
+    color: #0a0a0a;
+    margin-bottom: 2.5rem;
+  }
+
+
+  .writing-card {
+    border-bottom: none;
+    padding: 2rem 0;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .writing-card:first-of-type { border-top: none; }
+  .writing-card:hover { padding-left: 0.5rem; }
+  .writing-card:hover .card-title { color: var(--blue-mid); }
+
+  .card-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    color: var(--blue-light);
+    margin-bottom: 0.6rem;
+    text-transform: uppercase;
+  }
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.75rem;
+    font-weight: 500;
+    color: #0a1e30;
+    margin-bottom: 0.6rem;
+    transition: color 0.2s;
+    line-height: 1.25;
+  }
+  .card-excerpt {
+    font-size: 1.05rem;
+    color: #3a5068;
+    line-height: 1.8;
+    font-style: italic;
+  }
+  .card-read {
+    margin-top: 0.8rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: var(--blue-light);
+    text-transform: uppercase;
+  }
+
+  .no-writings {
+    text-align: center;
+    padding: 4rem 0;
+    color: var(--text-light);
+    font-style: italic;
+    font-size: 1.05rem;
+  }
+
+  /* ── SINGLE POST VIEW ── */
+  #view-post .post-nav {
+    background: var(--blue-deep);
+    padding: 1rem 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .back-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--blue-pale);
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  .back-btn:hover { opacity: 1; }
+
+  .post-container {
+    max-width: 660px;
+    margin: 0 auto;
+    padding: 3.5rem 2rem 5rem;
+  }
+  .post-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    color: var(--text-light);
+    margin-bottom: 1rem;
+  }
+  .post-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 500;
+    color: var(--blue-deep);
+    line-height: 1.25;
+    margin-bottom: 2rem;
+  }
+  .post-divider {
+    width: 40px;
+    height: 2px;
+    background: var(--gold);
+    margin-bottom: 2rem;
+    opacity: 0.7;
+  }
+  .post-body {
+    font-size: 1.25rem;
+    line-height: 2.1;
+    color: var(--text);
+  }
+  .post-body p { margin-bottom: 1.4rem; }
+
+  /* ══════════════════════════════
+     ADMIN LOGIN
+  ══════════════════════════════ */
+  #view-login {
+    min-height: 100vh;
+    background: var(--blue-deep);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #view-login.active { display: flex; }
+
+  .login-box {
+    background: var(--white);
+    padding: 3rem 2.5rem;
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+  }
+  .login-cross {
+    font-size: 1.2rem;
+    color: var(--gold);
+    letter-spacing: 0.3em;
+    margin-bottom: 1rem;
+  }
+  .login-box h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+    color: var(--blue-deep);
+    margin-bottom: 0.4rem;
+  }
+  .login-box p {
+    font-style: italic;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+  .login-field {
+    width: 100%;
+    border: 1px solid var(--blue-pale);
+    padding: 0.75rem 1rem;
+    font-family: 'EB Garamond', serif;
+    font-size: 1rem;
+    color: var(--text);
+    background: var(--white);
+    margin-bottom: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .login-field:focus { border-color: var(--blue-mid); }
+  .login-btn {
+    width: 100%;
+    background: var(--blue-deep);
+    color: var(--white);
+    border: none;
+    padding: 0.85rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-bottom: 1rem;
+  }
+  .login-btn:hover { background: var(--blue-mid); }
+  .login-error {
+    color: #c0392b;
+    font-size: 0.85rem;
+    font-style: italic;
+    display: none;
+  }
+  .login-back {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: var(--text-light);
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    text-transform: uppercase;
+  }
+  .login-back:hover { color: var(--blue-mid); }
+
+  /* ══════════════════════════════
+     ADMIN DASHBOARD
+  ══════════════════════════════ */
+  #view-admin.active { display: flex; flex-direction: column; min-height: 100vh; }
+
+  .admin-nav {
+    background: var(--blue-deep);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .admin-nav-brand {
+    font-family: 'Cinzel', serif;
+    color: var(--white);
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+  }
+  .admin-nav span {
+    font-style: italic;
+    color: var(--blue-pale);
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin-left: 1rem;
+  }
+  .logout-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: var(--blue-pale);
+    background: none;
+    border: 1px solid rgba(214,228,240,0.3);
+    padding: 0.4rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .logout-btn:hover { background: rgba(255,255,255,0.1); }
+
+  .admin-body {
+    display: flex;
+    flex: 1;
+    background: var(--cream);
+  }
+
+  /* Sidebar */
+  .admin-sidebar {
+    width: 220px;
+    background: var(--white);
+    border-right: 1px solid var(--blue-pale);
+    padding: 2rem 0;
+    flex-shrink: 0;
+  }
+  .sidebar-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    color: var(--text-light);
+    padding: 0 1.5rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+  .sidebar-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.7rem 1.5rem;
+    font-family: 'EB Garamond', serif;
+    font-size: 1rem;
+    color: var(--text);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-left: 3px solid transparent;
+  }
+  .sidebar-btn:hover { background: var(--blue-mist); color: var(--blue-mid); }
+  .sidebar-btn.active { border-left-color: var(--blue-mid); color: var(--blue-mid); background: var(--blue-mist); }
+
+  /* Main panel */
+  .admin-main {
+    flex: 1;
+    padding: 2.5rem;
+    overflow-y: auto;
+  }
+  .admin-panel { display: none; }
+  .admin-panel.active { display: block; }
+
+  .panel-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+    color: var(--blue-deep);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: none;
+    text-transform: uppercase;
+  }
+
+  /* Editor */
+  .editor-field {
+    width: 100%;
+    border: 1px solid var(--blue-pale);
+    padding: 0.75rem 1rem;
+    font-family: 'EB Garamond', serif;
+    font-size: 1rem;
+    color: var(--text);
+    background: var(--white);
+    outline: none;
+    transition: border-color 0.2s;
+    display: block;
+    margin-bottom: 1rem;
+  }
+  .editor-field:focus { border-color: var(--blue-mid); }
+  textarea.editor-field {
+    min-height: 380px;
+    resize: vertical;
+    line-height: 1.8;
+  }
+  .editor-hint {
+    font-size: 0.82rem;
+    color: var(--text-light);
+    font-style: italic;
+    margin-bottom: 0.5rem;
+    margin-top: -0.5rem;
+  }
+  .editor-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+  .btn-primary {
+    background: var(--blue-deep);
+    color: var(--white);
+    border: none;
+    padding: 0.75rem 2rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-transform: uppercase;
+  }
+  .btn-primary:hover { background: var(--blue-mid); }
+  .btn-secondary {
+    background: none;
+    color: var(--text-light);
+    border: 1px solid var(--blue-pale);
+    padding: 0.75rem 1.5rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .btn-secondary:hover { border-color: var(--blue-mid); color: var(--blue-mid); }
+
+  /* Drop zone */
+  .drop-zone {
+    border: 2px dashed var(--blue-pale);
+    padding: 2.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    background: var(--white);
+  }
+  .drop-zone:hover, .drop-zone.drag-over {
+    border-color: var(--blue-mid);
+    background: var(--blue-mist);
+  }
+  .drop-zone-icon { font-size: 2rem; margin-bottom: 0.5rem; color: var(--blue-light); }
+  .drop-zone p { color: var(--text-light); font-style: italic; font-size: 0.95rem; }
+  .drop-zone strong { color: var(--blue-mid); }
+  #drop-file-input { display: none; }
+
+  /* Posts manager */
+  .post-row {
+    background: var(--white);
+    border: 1px solid var(--blue-pale);
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .post-row-info { flex: 1; min-width: 0; }
+  .post-row-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--blue-deep);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .post-row-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    color: var(--text-light);
+    margin-top: 0.2rem;
+  }
+  .post-row-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+  .btn-small {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    padding: 0.35rem 0.8rem;
+    border: 1px solid;
+    cursor: pointer;
+    background: none;
+    text-transform: uppercase;
+    transition: all 0.15s;
+  }
+  .btn-edit { color: var(--blue-mid); border-color: var(--blue-pale); }
+  .btn-edit:hover { background: var(--blue-mist); }
+  .btn-delete { color: #c0392b; border-color: #fde8e8; }
+  .btn-delete:hover { background: #fde8e8; }
+
+  .success-msg {
+    background: #edfaf1;
+    border: 1px solid #a8e6bf;
+    color: #1e7e34;
+    padding: 0.75rem 1rem;
+    font-style: italic;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    display: none;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--blue-deep);
+    color: var(--blue-pale);
+    text-align: center;
+    padding: 2rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 1rem; }
+    .nav-motto { display: none; }
+    .admin-sidebar { width: 160px; }
+    .admin-main { padding: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     VIEW: PUBLIC HOME
+═══════════════════════════════════════ -->
+<div id="view-home" class="view active">
+  <nav>
+    <span class="nav-brand" onclick="showHome()">Sodales Caeli</span>
+    <span class="nav-motto">To love Thee and make Thee loved by all men</span>
+    <button class="nav-admin-link" onclick="showLogin()">☩</button>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-cross">✝</div>
+    <h1>Sodales Caeli</h1>
+    <div class="hero-divider"></div>
+    <p class="hero-motto">To love Thee and make Thee loved by all men</p>
+  </div>
+
+  <div class="writings-section">
+    <div class="section-label">Reflections</div>
+    <div id="public-posts-list"></div>
+  </div>
+
+  <footer>
+    Sodales Caeli &nbsp;·&nbsp; <em>To love Thee and make Thee loved by all men</em>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════════════════
+     VIEW: SINGLE POST
+═══════════════════════════════════════ -->
+<div id="view-post" class="view">
+  <div class="post-nav">
+    <button class="back-btn" onclick="showHome()">← Back to writings</button>
+    <span style="font-family:'Cinzel',serif;color:var(--blue-pale);font-size:0.7rem;letter-spacing:0.15em;opacity:0.5;">SODALES CAELI</span>
+  </div>
+  <div class="post-container">
+    <div class="post-date" id="post-date-display"></div>
+    <h1 class="post-title" id="post-title-display"></h1>
+    <div class="post-divider"></div>
+    <div class="post-body" id="post-body-display"></div>
+  </div>
+  <footer>
+    Sodales Caeli &nbsp;·&nbsp; <em>To love Thee and make Thee loved by all men</em>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════════════════
+     VIEW: LOGIN
+═══════════════════════════════════════ -->
+<div id="view-login" class="view">
+  <div class="login-box">
+    <div class="login-cross">✝</div>
+    <h2>Sodales Caeli</h2>
+    <p>Private entrance</p>
+    <input type="password" class="login-field" id="login-password" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Enter</button>
+    <p class="login-error" id="login-error">Incorrect password. Try again.</p>
+    <button class="login-back" onclick="showHome()">← Return to site</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     VIEW: ADMIN DASHBOARD
+═══════════════════════════════════════ -->
+<div id="view-admin" class="view">
+  <div class="admin-nav">
+    <div>
+      <span class="admin-nav-brand">Sodales Caeli</span>
+      <span>— Admin</span>
+    </div>
+    <button class="logout-btn" onclick="logout()">Sign out</button>
+  </div>
+
+  <div class="admin-body">
+    <!-- Sidebar -->
+    <div class="admin-sidebar">
+      <div class="sidebar-label">Menu</div>
+      <button class="sidebar-btn active" id="sb-new" onclick="switchPanel('new')">New Writing</button>
+      <button class="sidebar-btn" id="sb-drop" onclick="switchPanel('drop')">Drop a File</button>
+      <button class="sidebar-btn" id="sb-manage" onclick="switchPanel('manage')">My Writings</button>
+    </div>
+
+    <!-- Main -->
+    <div class="admin-main">
+
+      <!-- Panel: New Writing -->
+      <div class="admin-panel active" id="panel-new">
+        <div class="panel-title">New Writing</div>
+        <div class="success-msg" id="new-success">Writing published.</div>
+        <input type="text" class="editor-field" id="new-title" placeholder="Title">
+        <textarea class="editor-field" id="new-body" placeholder="Write here… Each blank line becomes a new paragraph."></textarea>
+        <div class="editor-actions">
+          <button class="btn-primary" onclick="publishNew()">Publish</button>
+          <button class="btn-secondary" onclick="clearNew()">Clear</button>
+        </div>
+      </div>
+
+      <!-- Panel: Drop a File -->
+      <div class="admin-panel" id="panel-drop">
+        <div class="panel-title">Drop a File</div>
+        <p class="editor-hint">Drop a plain .txt file — it will be imported as a new writing.</p>
+        <div class="drop-zone" id="drop-zone" onclick="document.getElementById('drop-file-input').click()"
+          ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="handleDrop(event)">
+          <div class="drop-zone-icon">☩</div>
+          <p><strong>Click or drag</strong> a .txt file here</p>
+          <p style="font-size:0.8rem;margin-top:0.3rem;">File name becomes the title</p>
+        </div>
+        <input type="file" id="drop-file-input" accept=".txt" onchange="handleFileInput(event)">
+        <div class="success-msg" id="drop-success">File imported. Review it in <em>My Writings</em>.</div>
+      </div>
+
+      <!-- Panel: Manage -->
+      <div class="admin-panel" id="panel-manage">
+        <div class="panel-title">My Writings</div>
+        <div id="manage-list"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SCRIPT
+═══════════════════════════════════════ -->
+<script>
+// ── PASSWORD (change this) ──────────────
+const ADMIN_PASSWORD = "Forthegloryofjesuschrist";
+
+// ── STORAGE ────────────────────────────
+function getPosts() {
+  try { return JSON.parse(localStorage.getItem('sc_posts') || '[]'); } catch { return []; }
+}
+function savePosts(posts) {
+  localStorage.setItem('sc_posts', JSON.stringify(posts));
+}
+
+// Seed first writing
+(function seedFirstPost() {
+  const posts = getPosts();
+  if (posts.length === 0) {
+    const first = {
+      id: Date.now(),
+      title: "For How Long Are We Called to Be Witnesses",
+      body: `I remember writing this morning, I also went to mass and I felt like I fulfilled my mission for the day. Then I went to church to look for the youth minister, but I didn't find him and ended up attending a second Mass.
+
+As I was about to receive Communion for the second time that day, I thought to myself: I am receiving Christ for a second time—so why do I limit my testimony to Him if He offers Himself all day, from morning to evening?
+
+I realized that I should strive to give my all to Him as well.
+
+I think, as creatives, one of the things we struggle with is settling for less. You finish one piece of work and rest too early, or because of the pressure you put on yourself, you end up burned out and doing nothing at all. Instead, create every opportunity you get—whether it's a big project or simply exploring a small idea.
+
+God created the world from Monday to Saturday and rested on the seventh day. Sunday is your cue to rest. But if you're reading this on a weekday, get up and go do that thing—whether it's filming, writing, serving the poor, or dancing. Go and do it. Come back later and finish reading.
+
+Not all your ideas are going to be good. Even as I'm writing this, it feels like a draft—but I'm still writing. At the end of the day, I'm still serving my mission.
+
+Something else I feel is very important is this: what is your "why"? Is your "why" about getting attention? Being liked by your friends or parents? Is it because you feel like what you do defines you? Who are you without all of it?
+
+One of the dreams I've always carried was to be on TV. But as time went on, I realized that TV had become accessible through social media—and that's where my focus shifted. I've always had a talent for it.
+
+I started a YouTube channel, created a podcast, and began writing notes on Substack. It all sounds a bit childish, I know—and none of it really worked out for me.
+
+Looking back, it's because my desire was rooted in myself. I was doing it for praise, to show people my talents, to prove that I was smart and had it all together.
+
+But Jesus says, "Ask, and you will receive."
+
+People sometimes laugh when others speak or write about Jesus. But if you're truly thoughtful and ask the right questions in your creative journey, here's the truth: at the bottom of it all, there is a man called Jesus.
+
+Until you find Him—until you surrender your selfish desires and do things for His glory—you'll keep searching. And He will show you that He doesn't need your work; He wants you first.
+
+You need to give yourself first. To understand that your identity is not in what you do, but in who you are—a beloved child of Christ.
+
+Then, through the same talents He gave you, He will send you: "Go and make disciples of all nations."
+
+So give purpose to your work. Pray for it. Ask—and an answer will be given to you.
+
+Distractions are many. That's one of the enemy's tactics—to make you feel like you're not good enough, like you're still lacking something. So instead, you sit and watch others live their lives, living out the potential that was also given to you.
+
+I'm not saying this to put pressure on you, but social media is not your friend—unless you're on the other side of it, creating. Don't look for inspiration there. Look within yourself. It's fine if you use it to discover events or opportunities you want to join, but don't waste your time scrolling.
+
+What you have to offer is enough, no matter how imperfect it may seem. But as I said, ask the right questions, and answers will be given to you.
+
+One thing that has helped me is this: every time I had a dream I wanted to pursue—whether it was acting, modeling, or photography—I would write it in a letter and go to church and place it in a prayer box, as a way of surrendering it to the Lord.
+
+But one thing that truly changed everything for me is Adoration. I always say to God, "Make me an advocate of Adoration," because my faith journey truly began there. I would sit in the pew and have what felt like therapy sessions with the Lord.
+
+Every question I struggled with, I brought it there. I gave it to Him. I complained, I spoke honestly, I said whatever was on my heart. And in the end, I would experience one of three outcomes:
+
+A direct answer (especially when God needed to change my perspective), the issue fading away if it wasn't necessary, or silence—but later, maybe a week after, I would see an answer unfold in my life.
+
+So go to Adoration. One thing I love about it is that you can simply enter the church, sit in a pew—no one is watching you. In fact, very few people are there. You can just speak to the Lord about your worries.
+
+And don't go just once. It takes months, even years, of transformation. The more you go, the more you gaze at His grace—and slowly, your face, your heart, and your behavior begin to reflect Him.
+
+It feels like the beginning is completely different from the end. I tried to make it as relatable as possible, but in the end, I'm here to speak about the truth that was revealed to me—and it's the same truth you see at the conclusion of this writing.
+
+Because truly, "our hearts are restless until they rest in the Lord."
+
+Seek first the Kingdom of God, and the rest will be given to you.`,
+      date: new Date().toISOString()
+    };
+    savePosts([first]);
+  }
+})();
+
+// ── ROUTING ───────────────────────────
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+function showHome() {
+  renderPublicPosts();
+  showView('view-home');
+}
+function showLogin() {
+  document.getElementById('login-password').value = '';
+  document.getElementById('login-error').style.display = 'none';
+  showView('view-login');
+}
+function showAdmin() {
+  renderManage();
+  showView('view-admin');
+}
+
+// ── AUTH ──────────────────────────────
+function doLogin() {
+  const pw = document.getElementById('login-password').value;
+  if (pw === ADMIN_PASSWORD) {
+    showAdmin();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+function logout() { showHome(); }
+
+// ── PUBLIC POSTS ──────────────────────
+function renderPublicPosts() {
+  const posts = getPosts();
+  const el = document.getElementById('public-posts-list');
+  if (posts.length === 0) {
+    el.innerHTML = '<p class="no-writings">No writings yet.</p>';
+    return;
+  }
+  el.innerHTML = posts.slice().reverse().map(p => `
+    <div class="writing-card" onclick="openPost(${p.id})">
+      <div class="card-date">${formatDate(p.date)}</div>
+      <div class="card-title">${escHtml(p.title)}</div>
+      <div class="card-excerpt">${escHtml(excerpt(p.body))}</div>
+      <div class="card-read">Read →</div>
+    </div>
+  `).join('');
+}
+
+function openPost(id) {
+  const post = getPosts().find(p => p.id === id);
+  if (!post) return;
+  document.getElementById('post-date-display').textContent = formatDate(post.date);
+  document.getElementById('post-title-display').textContent = post.title;
+  document.getElementById('post-body-display').innerHTML = post.body
+    .split(/\n\s*\n/)
+    .map(p => p.trim())
+    .filter(Boolean)
+    .map(p => `<p>${escHtml(p)}</p>`)
+    .join('');
+  showView('view-post');
+}
+
+// ── ADMIN PANELS ──────────────────────
+function switchPanel(name) {
+  document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  document.getElementById('sb-' + name).classList.add('active');
+  if (name === 'manage') renderManage();
+}
+
+function publishNew() {
+  const title = document.getElementById('new-title').value.trim();
+  const body = document.getElementById('new-body').value.trim();
+  if (!title || !body) return alert('Please add a title and some text.');
+  const posts = getPosts();
+  posts.push({ id: Date.now(), title, body, date: new Date().toISOString() });
+  savePosts(posts);
+  document.getElementById('new-success').style.display = 'block';
+  setTimeout(() => document.getElementById('new-success').style.display = 'none', 3000);
+  clearNew();
+}
+
+function clearNew() {
+  document.getElementById('new-title').value = '';
+  document.getElementById('new-body').value = '';
+}
+
+function renderManage() {
+  const posts = getPosts();
+  const el = document.getElementById('manage-list');
+  if (posts.length === 0) {
+    el.innerHTML = '<p style="font-style:italic;color:var(--text-light)">No writings yet.</p>';
+    return;
+  }
+  el.innerHTML = posts.slice().reverse().map(p => `
+    <div class="post-row">
+      <div class="post-row-info">
+        <div class="post-row-title">${escHtml(p.title)}</div>
+        <div class="post-row-date">${formatDate(p.date)}</div>
+      </div>
+      <div class="post-row-actions">
+        <button class="btn-small btn-edit" onclick="editPost(${p.id})">Edit</button>
+        <button class="btn-small btn-delete" onclick="deletePost(${p.id})">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function editPost(id) {
+  const post = getPosts().find(p => p.id === id);
+  if (!post) return;
+  switchPanel('new');
+  document.getElementById('new-title').value = post.title;
+  document.getElementById('new-body').value = post.body;
+  // Override publish to update
+  document.querySelector('#panel-new .btn-primary').onclick = function() {
+    const title = document.getElementById('new-title').value.trim();
+    const body = document.getElementById('new-body').value.trim();
+    if (!title || !body) return alert('Title and text required.');
+    const posts = getPosts();
+    const idx = posts.findIndex(p => p.id === id);
+    if (idx !== -1) { posts[idx].title = title; posts[idx].body = body; savePosts(posts); }
+    document.getElementById('new-success').style.display = 'block';
+    setTimeout(() => document.getElementById('new-success').style.display = 'none', 3000);
+    clearNew();
+    document.querySelector('#panel-new .btn-primary').onclick = publishNew;
+  };
+}
+
+function deletePost(id) {
+  if (!confirm('Delete this writing?')) return;
+  savePosts(getPosts().filter(p => p.id !== id));
+  renderManage();
+}
+
+// ── FILE DROP ─────────────────────────
+function dragOver(e) { e.preventDefault(); document.getElementById('drop-zone').classList.add('drag-over'); }
+function dragLeave(e) { document.getElementById('drop-zone').classList.remove('drag-over'); }
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('drop-zone').classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) importFile(file);
+}
+function handleFileInput(e) { if (e.target.files[0]) importFile(e.target.files[0]); }
+function importFile(file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const title = file.name.replace(/\.txt$/i, '').replace(/[-_]/g, ' ');
+    const body = e.target.result;
+    const posts = getPosts();
+    posts.push({ id: Date.now(), title, body, date: new Date().toISOString() });
+    savePosts(posts);
+    document.getElementById('drop-success').style.display = 'block';
+    setTimeout(() => document.getElementById('drop-success').style.display = 'none', 3000);
+  };
+  reader.readAsText(file);
+}
+
+// ── HELPERS ───────────────────────────
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function excerpt(s) {
+  const plain = s.replace(/\n/g,' ');
+  return plain.length > 160 ? plain.slice(0,160).trimEnd() + '…' : plain;
+}
+function formatDate(iso) {
+  return new Date(iso).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+}
+
+// ── INIT ──────────────────────────────
+renderPublicPosts();
+</script>
+</body>
+</html>
